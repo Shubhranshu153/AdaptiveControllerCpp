@@ -39,15 +39,6 @@ public:
         //calculate tau
 
 
-
-        
-
-        Eigen::MatrixXf W(2, 2);
-        W(0, 0) = q1ddot * a1 * a1 + g * cos(q1) * a1;
-        W(0, 1) = q1ddot * (a1 * a1 + 2 * cos(q2) * a1 * a2 + a2 * a2) - q2dot * (2 * a1 * a2 * q1dot * sin(q2) + a1 * a2 * q2dot * sin(q2)) + q2ddot * (a2 * a2 + a1 * cos(q2) * a2) + a2 * g * cos(q1 + q2) + a1 * g * cos(q1);
-        W(1, 0) = 0;
-        W(2, 2) = a2 * (a1 * sin(q2) * q1dot * q1dot + a2 * q1ddot + a2 * q2ddot + g * cos(q1 + q2) + a1 * q1ddot * cos(q2));
-
         //desired trajectory
         float Dq1 = sin(t);
         float Dq2 = -cos(t);
@@ -63,6 +54,40 @@ public:
         DX(4)=Dqddot1;
         DX(5)=Dqddot2;
 
+        Eigen::MatrixXf err(4,1);
+        err(0,0)=X(0)-DX(0);
+        err(1,0)=X(1)-DX(1);
+        err(2,0)=X(2)-DX(2);
+        err(3,0)=X(3)-DX(3);
+
+        Eigen::MatrixXf err_pos(2,1);
+        err_pos(0,0)=err(0,0);
+        err_pos(1,0)=err(1,0);
+
+
+        Eigen::MatrixXf err_vel(2,1);
+        err_vel(0,0)=err(2,0);
+        err_vel(1,0)=err(3,0);
+
+        Eigen::MatrixXf Kp(2,2);
+        Kp(0,0)=kp1;
+        Kp(1,1)=kp2;
+
+        Eigen::MatrixXf Kd(2,2);
+        Kd(0,0)=kd1;
+        Kd(1,1)=kd2;
+
+        
+
+
+
+        Eigen::MatrixXf W(2, 2);
+        W(0, 0) = q1ddot * a1 * a1 + g * cos(q1) * a1;
+        W(0, 1) = q1ddot * (a1 * a1 + 2 * cos(q2) * a1 * a2 + a2 * a2) - q2dot * (2 * a1 * a2 * q1dot * sin(q2) + a1 * a2 * q2dot * sin(q2)) + q2ddot * (a2 * a2 + a1 * cos(q2) * a2) + a2 * g * cos(q1 + q2) + a1 * g * cos(q1);
+        W(1, 0) = 0;
+        W(2, 2) = a2 * (a1 * sin(q2) * q1dot * q1dot + a2 * q1ddot + a2 * q2ddot + g * cos(q1 + q2) + a1 * q1ddot * cos(q2));
+
+
         //Setting A and Q matrix and lyapunov function
         Eigen::MatrixXf A = Eigen::MatrixXf::Zero(4, 4);
         Eigen::MatrixXf B = Eigen::MatrixXf::Identity(4, 2);
@@ -70,10 +95,10 @@ public:
         
         A(0, 2) = 1;
         A(1, 3) = 1;
-        A(2, 0) = -2;
-        A(2, 2) = -5;
-        A(3, 1) = -2;
-        A(3, 3) = -5;
+        A(2, 0) = -kp1;
+        A(2, 2) = -kd1;
+        A(3, 1) = -kp2;
+        A(3, 3) = -kd2;
 
 
         B(2,0)=1;
@@ -84,11 +109,7 @@ public:
         
 
         Eigen::MatrixXf invMp=Mp.inverse();
-        Eigen::MatrixXf err(4,1);
-        err(0,0)=X(0)-DX(0);
-        err(1,0)=X(1)-DX(1);
-        err(2,0)=X(2)-DX(2);
-        err(3,0)=X(3)-DX(3);
+ 
 
         Eigen::MatrixXf mass_ddot=-2*W.transpose()*invMp.transpose()*B.transpose()*P*err;
         Eigen::VectorXf new_dX(6);
@@ -99,4 +120,5 @@ public:
 private:
     float m1 = 1, m2 = 1, a1 = 1, a2 = 1;
     float g = 9.8;
+    float kp1=2,kp2=2, kd1=5,kd2=5;
 };
