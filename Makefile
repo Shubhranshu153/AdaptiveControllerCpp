@@ -14,7 +14,7 @@ all: $(TARGETS)
 # This will construct the binary 'c-example'
 # $^ = names of all the dependent files, deduped and with spaces
 # $@ = complete name of the target
-AdaptiveController: lyap.cpp
+AdaptiveController: AdaptiveControl.cpp
 	$(CC) $(CFLAGS) $^ `wx-config --cxxflags --libs std` -o $@
 
 # $(RM) is the platform agnostic way to delete a file (here rm -f)

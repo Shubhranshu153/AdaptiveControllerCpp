@@ -19,7 +19,7 @@ class lyap
                 for(int j=0; j<I.cols(); j++)
                     P2.block(i*A.rows(), j*A.cols(), A.rows(), A.cols()) = I(i, j) * A;
             }
-            cout<<P2<<endl;
+           
             return P2;   
         }
         void set_mat_size(int n)
@@ -32,8 +32,7 @@ class lyap
             set_mat_size(A.rows());
            Eigen::MatrixXf I= Eigen::MatrixXf::Identity (mat_size,mat_size) ;
          
-           cout<<A<<endl;
-           cout<<I<<endl;
+         
      
         
             Eigen::MatrixXf L=kroneckar(I,A);
@@ -53,7 +52,7 @@ class lyap
            }
 
            Eigen::VectorXf P=-T.inverse()*Q;
-           cout<<P<<endl;
+          
            
            Eigen::MatrixXf P_mat(mat_size,mat_size);
            for(int i=0;i<mat_size;i++)
@@ -64,7 +63,7 @@ class lyap
                }
 
            }
-            cout<<P_mat<<endl;
+           
             return P_mat;
         }
     private:
