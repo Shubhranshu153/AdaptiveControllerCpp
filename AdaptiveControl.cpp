@@ -11,6 +11,11 @@
 #include <iostream>
 #include "integrator.h"
 #include <cmath>
+#include <fstream>
+
+
+
+
 void rungeKutta(Eigen::VectorXf X0,double t_start, double t_stop) 
 { 
     
@@ -67,8 +72,16 @@ void rungeKutta(Eigen::VectorXf X0,double t_start, double t_stop)
         
        
     } 
-   cout<<"q1 "<<X(0)<<"\nq2 "<<X(1)<<endl;
-   cout<<"m1  "<<X(4)<<"\nm2 "<<X(1)<<endl;
+    vector <pair<double,double>> q1_data=rk->access_q1();
+    vector <pair<double,double>> q2_data=rk->access_q2();
+    ofstream file;
+    file.open("q1.csv");
+
+    for(auto i:q1_data)
+    {
+      file<<i.second<<","<<i.first<<endl;
+    }
+
      
 } 
 int main()

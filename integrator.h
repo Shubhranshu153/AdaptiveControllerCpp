@@ -4,6 +4,8 @@
 #include "MCT.h"
 #include "lyap.h"
 #include <cmath>
+#include <vector>
+
 
 class Integrator
 {
@@ -12,6 +14,7 @@ public:
     {
         static int i=1;
         double q1 = X(0);
+
         double q2 = X(1);
         double q1dot = X(2);
         double q2dot = X(3);
@@ -119,15 +122,31 @@ public:
         new_dX(3)=DX(5)+d_errX(3);
         new_dX(4)=mass_ddot(0);
         new_dX(5)=mass_ddot(1);
+
+        q1_plt.push_back(std::pair<double,double>(X(0),t));
+        q2_plt.push_back(std::pair<double,double>(X(1),t));
         
         
         return new_dX;
 
     }
 
+    vector<std::pair<double,double>> access_q1()
+    {
+        return q1_plt;
+    }
+
+    vector<std::pair<double,double>> access_q2()
+    {
+        return q2_plt;
+    }
+
+
 private:
     double m1 = 3, m2 = 2, a1 = 2, a2 = 3;
     double g = 9.8;
     double kp1=2,kp2=2, kd1=10,kd2=10;
+    vector <std::pair<double,double>> q1_plt;
+    vector <std::pair<double,double>> q2_plt;
 };
 
