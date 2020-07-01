@@ -8,33 +8,36 @@
 class Integrator
 {
 public:
-    Eigen::VectorXf diff(Eigen::VectorXf X, Eigen::VectorXf dX, float t)
+    Eigen::VectorXf diff(Eigen::VectorXf X, Eigen::VectorXf dX, double t)
     {
-        float q1 = X(0);
-        float q2 = X(1);
-        float q1dot = X(2);
-        float q2dot = X(3);
-        float delm1 = X(4);
-        float delm2 = X(5);
+        static int i=1;
+        double q1 = X(0);
+        double q2 = X(1);
+        double q1dot = X(2);
+        double q2dot = X(3);
+        double delm1 = X(4);
+        double delm2 = X(5);
 
-        float q1ddot = dX(2);
-        float q2ddot = dX(3);
+        double q1ddot = dX(2);
+        double q2ddot = dX(3);
 
-        float m1predict = m1 + delm1;
-        float m2predict = m2 + delm2;
-      //  cout<<"Mass "<<m1predict<<" "<<m2predict<<endl;
+        double m1predict = m1 + delm1;
+        double m2predict = m2 + delm2;
+        if(i%1000==0)
+            cout<<"Mass "<<m1predict<<" "<<m2predict<<endl;\
+        i++;
 
         MCT *mctp = new MCT(m1predict, m2predict, a1, a2);
         Eigen::MatrixXf Mp = mctp->M(q1, q2);
         delete mctp;
 
         //desired trajectory
-        float Dq1 = sin(t);
-        float Dq2 = -cos(t);
-        float Dqdot1 = cos(t);
-        float Dqdot2 = sin(t);
-        float Dqddot1 = -sin(t);
-        float Dqddot2 = cos(t);
+        double Dq1 = sin(t);
+        double Dq2 = -cos(t);
+        double Dqdot1 = cos(t);
+        double Dqdot2 = sin(t);
+        double Dqddot1 = -sin(t);
+        double Dqddot2 = cos(t);
         Eigen::VectorXf DX(6);
         DX(0)=Dq1;
         DX(1)=Dq2;
@@ -65,6 +68,16 @@ public:
         Eigen::MatrixXf Q = Eigen::MatrixXf::Identity(4, 4);
         Eigen::MatrixXf d_errX(4,1);
         Eigen::MatrixXf del_theta(2,1);
+
+
+        B(2,0)=1;
+        B(3,1)=1;
+
+     
+
+        del_theta(0,0)=delm1;
+        del_theta(1,0)=delm2;
+      //  cout<<"\n\nA "<<A<<endl;
 
          
         
@@ -99,7 +112,7 @@ public:
    
         Eigen::VectorXf new_dX(6);
         
-       // cout<<"mass change "<<mass_ddot<<endl;
+       // cout<<"mass change "<<mass_ddot<<endl
         new_dX(0)=DX(2)+d_errX(0);
         new_dX(1)=DX(3)+d_errX(1);
         new_dX(2)=DX(4)+d_errX(2);
@@ -107,13 +120,14 @@ public:
         new_dX(4)=mass_ddot(0);
         new_dX(5)=mass_ddot(1);
         
+        
         return new_dX;
 
     }
 
 private:
-    float m1 = 3, m2 = 2, a1 = 2, a2 = 3;
-    float g = 9.8;
-    float kp1=2,kp2=2, kd1=10,kd2=10;
+    double m1 = 3, m2 = 2, a1 = 2, a2 = 3;
+    double g = 9.8;
+    double kp1=2,kp2=2, kd1=10,kd2=10;
 };
 

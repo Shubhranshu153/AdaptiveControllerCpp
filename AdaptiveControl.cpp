@@ -11,10 +11,10 @@
 #include <iostream>
 #include "integrator.h"
 #include <cmath>
-void rungeKutta(Eigen::VectorXf X0,float t_start, float t_stop) 
+void rungeKutta(Eigen::VectorXf X0,double t_start, double t_stop) 
 { 
     
-    float t_step=0.001;
+    double t_step=0.01;
     long int n = (int)((t_stop - t_start) / t_step); 
     Eigen::VectorXf k1, k2, k3, k4, k5; 
     Eigen::VectorXf k1_dot, k2_dot, k3_dot, k4_dot, k5_dot; 
@@ -30,7 +30,7 @@ void rungeKutta(Eigen::VectorXf X0,float t_start, float t_stop)
     X(4)=-1;
     X(5)=1;
     Integrator *rk=new Integrator();
-    float t=t_start;
+    double t=t_start;
     cout<<n;
     
     
@@ -58,8 +58,11 @@ void rungeKutta(Eigen::VectorXf X0,float t_start, float t_stop)
         dX=(1.0/6.0)*(k1_dot + 2*k2_dot + 2*k3_dot + k4_dot);
   
         // // Update next value of x 
-        if(i%100==0)
+        if(i%1000==0)
+        {
             cout<<"Iteration "<<i<<endl;
+            cout<<"delX "<<dX<<endl;
+        }
         t = t + t_step; 
         
        
@@ -73,8 +76,8 @@ int main()
     Eigen::VectorXf X=Eigen::VectorXf::Zero(6);
     Eigen::VectorXf dX=Eigen::VectorXf::Zero(6);
     Eigen::VectorXf new_dX;
-    float t_start=0;
-    float t_stop=100;
+    double t_start=0;
+    double t_stop=100;
 
     rungeKutta(X,t_start,t_stop);
     
