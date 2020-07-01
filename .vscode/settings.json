@@ -2,6 +2,8 @@
     "files.associations": {
         "dense": "cpp",
         "stdvector": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "cmath": "cpp"
     }
 }

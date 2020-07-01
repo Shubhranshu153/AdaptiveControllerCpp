@@ -58,9 +58,9 @@ class MCT
 
     
     private:
-        float m1= 1;
-        float m2= 1;
-        float a1= 1;
-        float a2= 1;
+        float m1= 3;
+        float m2= 2;
+        float a1= 2;
+        float a2= 3;
         float g= 9.8;
 };

@@ -10,11 +10,12 @@
 #include "Eigen/StdVector"
 #include <iostream>
 #include "integrator.h"
+#include <cmath>
 void rungeKutta(Eigen::VectorXf X0,float t_start, float t_stop) 
 { 
     
-    float t_step=0.01;
-    int n = (int)((t_stop - t_start) / t_step); 
+    float t_step=0.001;
+    long int n = (int)((t_stop - t_start) / t_step); 
     Eigen::VectorXf k1, k2, k3, k4, k5; 
     Eigen::VectorXf k1_dot, k2_dot, k3_dot, k4_dot, k5_dot; 
 
@@ -22,14 +23,24 @@ void rungeKutta(Eigen::VectorXf X0,float t_start, float t_stop)
     Eigen::VectorXf dX=Eigen::VectorXf::Zero(6);
     dX(0)=X0(2);
     dX(1)=X0(3);
+    X(0)=M_PI/2;
+    X(1)=M_PI;
+
+
+    X(4)=-1;
+    X(5)=1;
     Integrator *rk=new Integrator();
     float t=t_start;
     cout<<n;
     
-    for (int i=1; i<=10; i++) 
+    
+    for (int i=1; i<=n; i++) 
     { 
         // Apply Runge Kutta Formulas to find 
         // next value of y
+
+        // dX=rk->diff(X,dX,t); 
+        // X=X+ t_step*dX; 
         k1_dot=rk->diff(X,dX,t); 
         k1 = t_step*k1_dot; 
        
@@ -44,14 +55,17 @@ void rungeKutta(Eigen::VectorXf X0,float t_start, float t_stop)
         k4=t_step*k4_dot;
   
         X = X + (1.0/6.0)*(k1 + 2*k2 + 2*k3 + k4);
-        dX=dX + (1.0/6.0)*(k1_dot + 2*k2_dot + 2*k3_dot + k4_dot);
+        dX=(1.0/6.0)*(k1_dot + 2*k2_dot + 2*k3_dot + k4_dot);
   
         // // Update next value of x 
+        if(i%100==0)
+            cout<<"Iteration "<<i<<endl;
         t = t + t_step; 
         
-        cout<<"change of delm1 "<<X(4)<<"\nchange of delm2 "<<X(5)<<endl;
+       
     } 
-  
+   cout<<"q1 "<<X(0)<<"\nq2 "<<X(1)<<endl;
+   cout<<"m1  "<<X(4)<<"\nm2 "<<X(1)<<endl;
      
 } 
 int main()
@@ -60,7 +74,7 @@ int main()
     Eigen::VectorXf dX=Eigen::VectorXf::Zero(6);
     Eigen::VectorXf new_dX;
     float t_start=0;
-    float t_stop=10;
+    float t_stop=100;
 
     rungeKutta(X,t_start,t_stop);
     
