@@ -8,7 +8,7 @@ Demo 1
 - Starting angle: q1= pi/2 and q2= pi
 - Desired Trajectory q1=pi+sin(t) and q2=2pi-cos(t)
 
-![][DoublePendulum.gif]
+![](DoublePendulum.gif)
 
 # Adaptive Controller
 The Adaptive controller uses the following Equations to solve:
