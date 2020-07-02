@@ -35,8 +35,8 @@ public:
         delete mctp;
 
         //desired trajectory
-        double Dq1 = sin(t);
-        double Dq2 = -cos(t);
+        double Dq1 = M_PI+sin(t);
+        double Dq2 = 2*M_PI-cos(t);
         double Dqdot1 = cos(t);
         double Dqdot2 = sin(t);
         double Dqddot1 = -sin(t);
@@ -99,23 +99,19 @@ public:
 
         del_theta(0,0)=delm1;
         del_theta(1,0)=delm2;
-      //  cout<<"\n\nA "<<A<<endl;
+      
 
         Eigen::MatrixXf Mp_inv=Mp.inverse();
         d_errX=A*err + B*Mp_inv*W*del_theta;
        
-
         
         lyap *test = new lyap();
-        Eigen::MatrixXf P = test->lyapunov(A.transpose(), Q); 
-     //   cout<<"P "<<P<<endl;
-
-        
+        Eigen::MatrixXf P = test->lyapunov(A.transpose(), Q);     
         Eigen::MatrixXf mass_ddot=-2*W.transpose()*Mp_inv*B.transpose()*P*err;
    
         Eigen::VectorXf new_dX(6);
         
-       // cout<<"mass change "<<mass_ddot<<endl
+    
         new_dX(0)=DX(2)+d_errX(0);
         new_dX(1)=DX(3)+d_errX(1);
         new_dX(2)=DX(4)+d_errX(2);
@@ -125,6 +121,18 @@ public:
 
         q1_plt.push_back(std::pair<double,double>(X(0),t));
         q2_plt.push_back(std::pair<double,double>(X(1),t));
+
+        q1dot_plt.push_back(std::pair<double,double>(X(2),t));
+        q2dot_plt.push_back(std::pair<double,double>(X(3),t));
+
+        desired_q1_plt.push_back(std::pair<double,double>(sin(t),t));
+        desired_q2_plt.push_back(std::pair<double,double>(-cos(t),t));
+
+        desired_q1dot_plt.push_back(std::pair<double,double>(cos(t),t));
+        desired_q2dot_plt.push_back(std::pair<double,double>(sin(t),t));
+
+        m1_plt.push_back(std::pair<double,double>(m1predict,t));
+        m2_plt.push_back(std::pair<double,double>(m2predict,t));
         
         
         return new_dX;
@@ -141,6 +149,46 @@ public:
         return q2_plt;
     }
 
+    vector<std::pair<double,double>> access_q1dot()
+    {
+        return q1dot_plt;
+    }
+
+    vector<std::pair<double,double>> access_q2dot()
+    {
+        return q2dot_plt;
+    }
+     vector<std::pair<double,double>> access_desired_q1()
+    {
+        return desired_q1_plt;
+    }
+
+    vector<std::pair<double,double>> access_desired_q2()
+    {
+        return desired_q2_plt;
+    }
+
+    vector<std::pair<double,double>> access_desired_q1dot()
+    {
+        return desired_q1dot_plt;
+    }
+
+    vector<std::pair<double,double>> access_desired_q2dot()
+    {
+        return desired_q2dot_plt;
+    }
+    
+    vector<std::pair<double,double>> access_m1()
+    {
+        return m1_plt;
+    }
+
+    vector<std::pair<double,double>> access_m2()
+    {
+        return m2_plt;
+    }
+    
+
 
 private:
     double m1 = 3, m2 = 2, a1 = 2, a2 = 3;
@@ -148,5 +196,13 @@ private:
     double kp1=2,kp2=2, kd1=10,kd2=10;
     vector <std::pair<double,double>> q1_plt;
     vector <std::pair<double,double>> q2_plt;
+    vector <std::pair<double,double>> q1dot_plt;
+    vector <std::pair<double,double>> q2dot_plt;
+    vector <std::pair<double,double>> m1_plt;
+    vector <std::pair<double,double>> m2_plt;
+    vector <std::pair<double,double>> desired_q1_plt;
+    vector <std::pair<double,double>> desired_q2_plt;
+    vector <std::pair<double,double>> desired_q1dot_plt;
+    vector <std::pair<double,double>> desired_q2dot_plt;
 };
 

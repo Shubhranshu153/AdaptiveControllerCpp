@@ -74,12 +74,25 @@ void rungeKutta(Eigen::VectorXf X0,double t_start, double t_stop)
     } 
     vector <pair<double,double>> q1_data=rk->access_q1();
     vector <pair<double,double>> q2_data=rk->access_q2();
+    vector <pair<double,double>> q1dot_data=rk->access_q1dot();
+    vector <pair<double,double>> q2dot_data=rk->access_q2dot();
+
+    vector <pair<double,double>> m1_data=rk->access_m1();
+    vector <pair<double,double>> m2_data=rk->access_m2();
+
+    vector <pair<double,double>> desired_q1_data=rk->access_desired_q1();
+    vector <pair<double,double>> desired_q2_data=rk->access_desired_q2();
+    vector <pair<double,double>> desired_q1dot_data=rk->access_desired_q1dot();
+    vector <pair<double,double>> desired_q2dot_data=rk->access_desired_q2dot();
+
     ofstream file;
     file.open("q1.csv");
 
-    for(auto i:q1_data)
+    for(int i=0;i<q1_data.size();i++)
     {
-      file<<i.second<<","<<i.first<<endl;
+      file<<q1_data[i].second<<","<<q1_data[i].first<<","<<q2_data[i].first<<","<<q1dot_data[i].first
+      <<","<<q2dot_data[i].first<<","<<m1_data[i].first<<","<<m2_data[i].first<<","<<desired_q1_data[i].first<<","<<desired_q2_data[i].first<<","
+      <<desired_q1dot_data[i].first<<","<<desired_q2dot_data[i].first<<endl;
     }
 
      
