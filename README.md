@@ -11,10 +11,8 @@ Demo 1
 ![](DoublePendulum.gif)
 
 # Adaptive Controller
-The Adaptive controller uses the following Equations to solve:
-
-
-credits:
+The implementation for the adaptive controller is explained in the following link
+https://www.linkedin.com/pulse/adaptive-controller-shubharanshu-mahapatra-/?published=t
 
 # Lyapunov Function
 I have used the following method to implement the lyapunov function. Follow the link
