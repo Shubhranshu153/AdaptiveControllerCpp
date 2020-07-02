@@ -16,6 +16,10 @@ The Adaptive controller uses the following Equations to solve:
 
 credits:
 
+# Lyapunov Function
+I have used the following method to implement the lyapunov function. Follow the link
+credits: https://people.kth.se/~eliasj/NLA/matrixeqs.pdf
+
 # Pendulum Manipulator Equations:
    
 ## Getting Started
